@@ -169,37 +169,6 @@
 
 ---
 
-## Authentication Endpoints
-
-### 1. Obtain JWT Token
-- **Path**: `/api/token/`
-- **Method**: POST
-- **Description**: Retrieve JWT token for user authentication.
-- **Request Parameters**:
-  - `username` (string, required)
-  - `password` (string, required)
-- **Response**:
-  ```json
-  {
-      "access": "<access_token>",
-      "refresh": "<refresh_token>"
-  }
-  ```
-
-### 2. Refresh JWT Token
-- **Path**: `/api/token/refresh/`
-- **Method**: POST
-- **Description**: Refresh the access token using the refresh token.
-- **Request Parameters**:
-  - `refresh` (string, required)
-- **Response**:
-  ```json
-  {
-      "access": "<new_access_token>"
-  }
-  ```
-
----
 
 ## User Management Endpoints
 
