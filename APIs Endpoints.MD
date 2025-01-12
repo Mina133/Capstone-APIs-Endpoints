@@ -1,206 +1,203 @@
-# Inventory Management API Endpoints
+# API Endpoints Documentation
 
-## Inventory Item Management Endpoints
+## **1. Items API**
 
-### 1. List/Create Inventory Items
-- **Path**: `/api/inventory/`
-- **Method**: GET/POST
-- **Description**: Retrieve or create inventory items.
-- **Request Example (POST)**:
-  ```json
-  {
-      "name": "Laptop",
-      "description": "Gaming Laptop",
-      "quantity": 10,
-      "price": 1500.00,
-      "category": 1,
-      "supplier": 2,
-      "store": 3,
-      "low_stock_threshold": 5
-  }
-  ```
-- **Response Example**:
-  ```json
-  {
-      "id": 1,
-      "name": "Laptop",
-      "description": "Gaming Laptop",
-      "quantity": 10,
-      "price": 1500.00,
-      "category": 1,
-      "supplier": 2,
-      "store": 3,
+### **Endpoint: `/api/item/`**
+- **HTTP Methods**: `GET`, `POST`
+- **Description**: List all items or create a new item.
+- **Request Parameters**:
+  - For `POST`:
+    ```json
+    {
+      "Name": "Item Name",
+      "Description": "Item Description",
+      "Quantity": 100,
+      "Price": 50.0,
+      "Category": 1,
+      "low_stock_threshold": 10,
+      "store": 1,
+      "barcode": "12345"
+    }
+    ```
+- **Responses**:
+  - `200 OK` (for `GET`): List of all items.
+  - `201 Created` (for `POST`): The newly created item.
+
+### **Endpoint: `/api/item/<int:pk>/`**
+- **HTTP Methods**: `GET`, `PUT`, `DELETE`
+- **Description**: Retrieve, update, or delete a specific item.
+- **Request Parameters**:
+  - For `PUT`:
+    ```json
+    {
+      "Name": "Updated Name",
+      "Description": "Updated Description",
+      "Quantity": 50,
+      "Price": 40.0,
+      "Category": 2,
       "low_stock_threshold": 5,
-      "date_added": "2025-01-08T12:34:56Z",
-      "last_updated": "2025-01-08T12:34:56Z"
-  }
-  ```
-
-## 2. Retrieve/Update/Delete Inventory Item
-- **Path**: `/api/inventory/<id>/`
-- **Method**: GET/PUT/DELETE
-- **Description**: Retrieve, update, or delete a specific inventory item.
-- **Request Example (PUT)**:
-  ```json
-  {
-      "quantity": 15
-  }
-  ```
-- **Response Example**:
-  ```json
-  {
-      "id": 1,
-      "name": "Laptop",
-      "quantity": 15
-  }
-  ```
-
----
-
-## Category Management Endpoints
-
-### 1. List/Create Categories
-- **Path**: `/api/categories/`
-- **Method**: GET/POST
-- **Description**: Retrieve or create categories.
-- **Request Example (POST)**:
-  ```json
-  {
-      "name": "Electronics"
-  }
-  ```
-- **Response Example**:
-  ```json
-  {
-      "id": 1,
-      "name": "Electronics"
-  }
-  ```
-
-### 2. Retrieve/Update/Delete Category
-- **Path**: `/api/categories/<id>/`
-- **Method**: GET/PUT/DELETE
-- **Description**: Manage a specific category.
-
----
-
-## Inventory Levels Endpoint
-
-### 1. View Inventory Levels with Filters
-- **Path**: `/api/inventory/levels/`
-- **Method**: GET
-- **Description**: View inventory levels with optional filters.
-- **Query Parameters**:
-  - `category` (string, optional)
-  - `price_min` (float, optional)
-  - `price_max` (float, optional)
-  - `low_stock` (boolean, optional)
-- **Response Example**:
-  ```json
-  [
-      {
-          "name": "Laptop",
-          "quantity": 10,
-          "price": 1500.00,
-          "category__name": "Electronics"
-      },
-      {
-          "name": "Phone",
-          "quantity": 50,
-          "price": 800.00,
-          "category__name": "Electronics"
-      }
-  ]
-  ```
-
----
-
-## Inventory Change Log Endpoint
-
-### 1. View Inventory Logs
-- **Path**: `/api/logs/`
-- **Method**: GET
-- **Description**: Retrieve the history of inventory changes.
-- **Response Example**:
-  ```json
-  [
-      {
-          "item": 1,
-          "user": 1,
-          "change_type": "Restock",
-          "change_quantity": 5,
-          "timestamp": "2025-01-08T12:34:56Z"
-      }
-  ]
-  ```
-## Reorder Suggestions Endpoint
-
-### 1. View Reorder Suggestions
-- **Path**: `/api/inventory/reorder/`
-- **Method**: GET
-- **Description**: Suggest items to restock based on low stock thresholds.
-- **Response Example**:
-  ```json
-  [
-      {
-          "name": "Laptop",
-          "quantity": 2,
-          "low_stock_threshold": 5
-      }
-  ]
-  ```
-
----
-
-## Inventory Report Endpoint
-
-### 1. Generate Inventory Report
-- **Path**: `/api/report/`
-- **Method**: GET
-- **Description**: Generate a report of total inventory value and low stock items.
-- **Response Example**:
-  ```json
-  {
-      "total_value": 25000.00,
-      "low_stock_items": 3
-  }
-  ```
-
-
----
-
-
-## User Management Endpoints
-
-### 1. User CRUD
-- **Path**: `/api/users/`
-- **Method**: GET/POST/PUT/DELETE
-- **Description**: Manage user accounts.
-- **Request Examples**:
-  - Create User (POST):
-    ```json
-    {
-        "username": "user1",
-        "email": "user1@example.com",
-        "password": "securepassword"
+      "store": 1,
+      "barcode": "67890"
     }
     ```
-  - Update User (PUT):
-    ```json
+- **Responses**:
+  - `200 OK` (for `GET` and `PUT`): Item details or updated item.
+  - `204 No Content` (for `DELETE`).
+
+### **Endpoint: `/api/item/level/`**
+- **HTTP Method**: `GET`
+- **Description**: List inventory levels for all items.
+- **Response**:
+  ```json
+  [
     {
-        "username": "updated_user"
+      "id": 1,
+      "Name": "Item Name",
+      "Quantity": 50
     }
-    ```
-- **Response Example**:
+  ]
+  ```
+
+### **Endpoint: `/api/item/report/`**
+- **HTTP Method**: `GET`
+- **Description**: Generate an inventory report.
+- **Response**:
   ```json
   {
-      "id": 1,
-      "username": "updated_user",
-      "email": "user1@example.com"
+    "total_items": 10,
+    "total_value": 5000.0
   }
+  ```
+
+### **Endpoint: `/api/item/barcode/<str:barcode>/`**
+- **HTTP Method**: `GET`
+- **Description**: Retrieve an item by its barcode.
+- **Response**:
+  ```json
+  {
+    "id": 1,
+    "Name": "Item Name",
+    "Description": "Item Description",
+    "Quantity": 100,
+    "Price": 50.0,
+    "barcode": "12345"
+  }
+  ```
+
+### **Endpoint: `/api/item/reorder/`**
+- **HTTP Method**: `GET`
+- **Description**: List items below their reorder threshold.
+- **Response**:
+  ```json
+  [
+    {
+      "id": 1,
+      "Name": "Low Stock Item",
+      "Quantity": 5
+    }
+  ]
   ```
 
 ---
 
+## **2. Categories API**
 
+### **Endpoint: `/api/category/`**
+- **HTTP Methods**: `GET`, `POST`
+- **Description**: List all categories or create a new category.
+- **Request Parameters**:
+  - For `POST`:
+    ```json
+    {
+      "Name": "Category Name"
+    }
+    ```
+- **Responses**:
+  - `200 OK` (for `GET`): List of all categories.
+  - `201 Created` (for `POST`): The newly created category.
 
+### **Endpoint: `/api/category/<int:pk>/`**
+- **HTTP Methods**: `GET`, `PUT`, `DELETE`
+- **Description**: Retrieve, update, or delete a specific category.
+- **Responses**:
+  - `200 OK` (for `GET` and `PUT`): Category details or updated category.
+  - `204 No Content` (for `DELETE`).
+
+---
+
+## **3. Stores API**
+
+### **Endpoint: `/api/stores/`**
+- **HTTP Methods**: `GET`, `POST`
+- **Description**: List all stores or create a new store.
+- **Request Parameters**:
+  - For `POST`:
+    ```json
+    {
+      "Name": "Store Name",
+      "Location": "Store Location"
+    }
+    ```
+- **Responses**:
+  - `200 OK` (for `GET`): List of all stores.
+  - `201 Created` (for `POST`): The newly created store.
+
+### **Endpoint: `/api/stores/<int:pk>/`**
+- **HTTP Methods**: `GET`, `PUT`, `DELETE`
+- **Description**: Retrieve, update, or delete a specific store.
+- **Responses**:
+  - `200 OK` (for `GET` and `PUT`): Store details or updated store.
+  - `204 No Content` (for `DELETE`).
+
+---
+
+## **4. Users API**
+
+### **Endpoint: `/api/users/`**
+- **HTTP Methods**: `GET`, `POST`
+- **Description**: List all users or create a new user.
+- **Request Parameters**:
+  - For `POST`:
+    ```json
+    {
+      "username": "user1",
+      "email": "user1@example.com",
+      "password": "password123"
+    }
+    ```
+- **Responses**:
+  - `200 OK` (for `GET`): List of all users.
+  - `201 Created` (for `POST`): The newly created user.
+
+### **Endpoint: `/api/users/<int:pk>/`**
+- **HTTP Methods**: `GET`, `PUT`, `DELETE`
+- **Description**: Retrieve, update, or delete a specific user.
+- **Responses**:
+  - `200 OK` (for `GET` and `PUT`): User details or updated user.
+  - `204 No Content` (for `DELETE`).
+
+---
+
+## **5. Roles API**
+
+### **Endpoint: `/api/roles/`**
+- **HTTP Methods**: `GET`, `POST`
+- **Description**: List all roles or create a new role.
+- **Request Parameters**:
+  - For `POST`:
+    ```json
+    {
+      "name": "Role Name",
+      "description": "Role Description"
+    }
+    ```
+- **Responses**:
+  - `200 OK` (for `GET`): List of all roles.
+  - `201 Created` (for `POST`): The newly created role.
+
+### **Endpoint: `/api/roles/<int:pk>/`**
+- **HTTP Methods**: `GET`, `PUT`, `DELETE`
+- **Description**: Retrieve, update, or delete a specific role.
+- **Responses**:
+  - `200 OK` (for `GET` and `PUT`): Role details or updated role.
+  - `204 No Content` (for `DELETE`).
